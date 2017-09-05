@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block javascript %}
+<script>
+function toggleDoor() {
+	var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+	$.ajax({
+		url: '/garage/api/toggle',
+		type: 'POST',
+		headers: {
+			'X-CSRFToken': csrftoken
+		},
+		data: '{}',
+		dataType: 'json',
+		data: '{}'
+	}).done(function(data) {
+		alert(JSON.stringify(data));
+	});
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<h2> Garage State: <div class="garageState">{{ state }} </div></h2>
+
+<h2> Open/Close: <a href="#" onclick="javascript:toggleDoor();">{{ action }}</a>
+</h2>
+
+<h2> History </h2>
+<table>
+	<tr>
+		<th>Time</th>
+		<th>Operation</th>
+		<th>Result</th>
+		<th>Detail</th>
+	</tr>
+	{% for record in history %}
+	<tr>
+			<td>{{record.op_date}}</th>
+			<td><div class="garageState {{record.op_type}}">{{record.op_type}}</div></th>
+			<td>{{record.op_succeed}}</th>
+			<th>{{record.error_message}}</th>
+	</tr>
+	{% endfor %}
+</table>
+{% endblock %}

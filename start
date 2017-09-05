@@ -1,0 +1,11 @@
+#!/bin/bash
+pgrep python | while read pid
+do
+	work_dir=$(readlink -f /proc/$pid/cwd)
+	if [ "$work_dir" == "$(pwd)" ];then
+		kill -9 $pid
+	fi
+done
+
+python manage.py runserver 0:8000 &
+disown
