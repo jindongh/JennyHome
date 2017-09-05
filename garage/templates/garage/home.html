@@ -14,14 +14,14 @@ function toggleDoor() {
 		dataType: 'json',
 		data: '{}'
 	}).done(function(data) {
-		alert(JSON.stringify(data));
+		location.reload();
 	});
 }
 </script>
 {% endblock %}
 
 {% block content %}
-<h2> Garage State: <div class="garageState">{{ state }} </div></h2>
+<h2> Garage State: <span class="garageState {{state}}">{{ state }} </span></h2>
 
 <h2> Open/Close: <a href="#" onclick="javascript:toggleDoor();">{{ action }}</a>
 </h2>

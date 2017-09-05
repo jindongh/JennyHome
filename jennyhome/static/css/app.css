@@ -1,7 +1,11 @@
-Garage Close {
-	color: green;
-};
-
-Garage Open {
+.garageState.Open {
 	color: orange;
-};
+}
+
+.garageState.Close {
+	color: green;
+}
+
+.garageState.Unknown {
+	color: red;
+}
