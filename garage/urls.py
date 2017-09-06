@@ -1,8 +1,9 @@
-from django.conf.urls import patterns, include, url
-from django.contrib import admin
+from django.conf.urls import url
 
-urlpatterns = patterns('',
-    url(r'^$', 'garage.views.home', name='home'),
-    url(r'^api/state', 'garage.views.state', name='state'),
-    url(r'^api/toggle', 'garage.views.toggle', name='toggle'),
-)
+from . import views
+
+urlpatterns = [
+    url(r'^$', views.home, name='home'),
+    url(r'^api/state', views.state, name='state'),
+    url(r'^api/toggle', views.toggle, name='toggle'),
+]
