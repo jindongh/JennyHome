@@ -13,4 +13,5 @@ urlpatterns = [
     url('^', include('django.contrib.auth.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^accounts/login/$', auth_views.LoginView.as_view(template_name='jennyhome/login.html')),
+    url('', include('social_django.urls', namespace='social')),
 ]

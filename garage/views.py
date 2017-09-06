@@ -23,10 +23,12 @@ def home(request):
             }
     return render(request, 'garage/home.html', context)
 
+@login_required
 def state(request):
     curState = _getDoorState()
     return JsonResponse({'state': curState})
 
+@login_required
 def toggle(request):
     logger.info('Try to toggle garage door')
     newState = DOOR_UNKNOWN

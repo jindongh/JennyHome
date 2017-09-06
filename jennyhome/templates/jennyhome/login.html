@@ -30,6 +30,10 @@ please login with an account that has access.</p>
 
 	<input type="submit" value="login" />
 	<input type="hidden" name="next" value="{{ next }}" />
+	<br/>
+	<a href="{% url "social:begin" "google-oauth2" %}?next={{ request.GET.next }}">Google+</a>
+	<br/>
+	<a href="{% url "social:begin" "github" %}?next={{ request.GET.next }}">Github</a>
 </form>
 
 {# Assumes you setup the password_reset view in your URLconf #}

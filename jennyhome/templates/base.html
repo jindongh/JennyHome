@@ -3,12 +3,26 @@
 	<head>
 		<meta charset="utf-8">
 		<title>{% block title %}Jenny Home{% endblock %}</title>
+		<link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap.min.css' %}">
 		<link rel="stylesheet" type="text/css" href="{% static 'css/app.css' %}">
 		{% block stylesheet %}{% endblock %}
 	</head>
 	<body>
 		{% csrf_token %}
 		<header>
+			<nav class="navbar navbar-default">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<a class="navbar-brand" href="#">Jenny's Home</a>
+					</div>
+					<ul class="nav navbar-nav">
+						<li class="active"><a href="/">Home</a></li>
+						<li><a href="/garage/">Garage</a></li>
+						<li><a href="/note/">Note</a></li>
+						<li><a href="/reminder/">Reminder</a></li>
+					</ul>
+				</div>
+			</nav>
 		</header>
 		<main>
 		{% block content %}
