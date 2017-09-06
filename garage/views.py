@@ -65,7 +65,7 @@ def _getNextDoorState(curState):
 
 def _getDoorStateFrom(history):
     if len(history) == 0:
-        return 'Closed'
+        return DOOR_CLOSE
     else:
         return history[0].op_type
 

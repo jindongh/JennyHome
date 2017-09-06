@@ -9,3 +9,8 @@ virtualenv env
 source env/bin/activate
 ./start
 ```
+
+# Development
+```
+python manage.py test garage
+```
