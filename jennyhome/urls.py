@@ -9,6 +9,7 @@ urlpatterns = [
     # Examples:
     url(r'^$', views.home, name='home'),
     url(r'^garage/', include('garage.urls')),
+    url(r'^note/', include('note.urls')),
 
     url('^', include('django.contrib.auth.urls')),
     url(r'^admin/', admin.site.urls),

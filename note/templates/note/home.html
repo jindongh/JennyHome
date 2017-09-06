@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+
+{% block javascript %}
+<script>
+var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+function addNoteToTable(noteId, content, addToTop) {
+	var div='<div class="well" id="note'+noteId+'">'
+		+ '<span id="noteContent'+noteId+'">'+content+'</span>&nbsp;&nbsp;'
+		+ '<a href="#" onclick="removeNote(\''+noteId+'\');">Remove</a>&nbsp;&nbsp;'
+		+ '<a href="#" onclick="editNote(\''+noteId+'\');">Edit</a>'
+		+ '</div>';
+	if (addToTop) {
+		$("#noteList").prepend(div);
+	} else {
+		$("#noteList").append(div);
+	}
+}
+function removeNoteFromTable(noteId) {
+	$("#note"+noteId).remove();
+}
+function addNote() {
+	$.ajax({
+		url: 'api/add/',
+		type: 'POST',
+		headers: {
+			'X-CSRFToken': csrftoken
+		},
+		data: {'content': $("#content").val()}
+	}).done(function(data) {
+		addNoteToTable(data.id, data.content, true);
+		$("#content").val('');
+	});
+}
+function removeNote(noteId) {
+	$.ajax({
+		url: 'api/remove/',
+		type: 'POST',
+		headers: {
+			'X-CSRFToken': csrftoken
+		},
+		data: {'id': noteId},
+	}).done(function(data) {
+		removeNoteFromTable(noteId);
+	});
+}
+function editNote(noteId) {
+	var content = $("#noteContent"+noteId).text();
+	$.ajax({
+		url: 'api/remove/',
+		type: 'POST',
+		headers: {
+			'X-CSRFToken': csrftoken
+		},
+		data: {'id': noteId},
+	}).done(function(data) {
+		removeNoteFromTable(noteId);
+		$("#content").val(content);
+	});
+}
+$(document).ready(function(){
+	$("#saveNote").click(function(){
+		addNote();
+	});
+	$.ajax({
+		url: 'api/list/',
+		type: 'GET',
+		headers: {
+			'X-CSRFToken': csrftoken
+		}
+	}).done(function(data) {
+		$.each(data, function(id, note) {
+			addNoteToTable(note.id, note.content, false);
+		});
+	});
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<span>
+	<textarea id="content"></textarea>
+	<input type="button" value="Add" id="saveNote"/>
+</span>
+
+<div id="noteList">
+</div>
+
+{% endblock %}
+

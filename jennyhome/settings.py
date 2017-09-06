@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'social_django',
     'jennyhome',
     'garage',
+    'note',
 ]
 
 MIDDLEWARE = [
