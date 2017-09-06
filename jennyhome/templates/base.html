@@ -16,10 +16,10 @@
 						<a class="navbar-brand" href="#">Jenny's Home</a>
 					</div>
 					<ul class="nav navbar-nav">
-						<li class="active"><a href="/">Home</a></li>
-						<li><a href="/garage/">Garage</a></li>
-						<li><a href="/note/">Note</a></li>
-						<li><a href="/reminder/">Reminder</a></li>
+						<li {% if '/' == request.path %} class="active"{% endif %}><a href="/">Home</a></li>
+						<li {% if '/garage/' in request.path %} class="active"{% endif %}><a href="/garage/">Garage</a></li>
+						<li {% if '/note/' in request.path %} class="active"{% endif %}><a href="/note/">Note</a></li>
+						<li {% if '/reminder/' in request.path %} class="active"{% endif %}><a href="/reminder/">Reminder</a></li>
 					</ul>
 				</div>
 			</nav>
