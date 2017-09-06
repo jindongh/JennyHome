@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from models import GarageOp
 from django.http import JsonResponse
@@ -10,6 +11,7 @@ DOOR_CLOSE = 'Close'
 DOOR_UNKNOWN = 'Unknown'
 
 # Create your views here.
+@login_required
 def home(request):
     history = GarageOp.objects.order_by('-op_date')[:10]
     curState = _getDoorStateFrom(history)

@@ -1,0 +1,7 @@
+# Email.
+EMAIL_HOST_USER = 'xxxxxx@gmail.com'
+EMAIL_HOST_PASSWORD = 'xxxxxx'
+
+# Google
+
+# Github
