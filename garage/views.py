@@ -1,9 +1,10 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from models import GarageOp
+from django.http import HttpResponse
 from django.http import JsonResponse
 from datetime import datetime
-
+from django.conf import settings
 import logging
 logger = logging.getLogger(__name__)
 DOOR_OPEN = 'Open'
@@ -72,6 +73,15 @@ def _getDoorStateFrom(history):
         return DOOR_CLOSE
     else:
         return history[0].op_type
+
+@login_required
+def doorImage(request):
+    blink = settings.BLINK
+    network = blink.network('Home')
+    camera = blink.camera(network, 'Garage')
+    thumb = blink.capture_thumbnail(camera)
+    image = blink.download_thumbnail(thumb)
+    return HttpResponse(image, content_type="image/jpeg")
 
 def _getDoorState():
     history = GarageOp.objects.order_by('-op_date')[:1]
