@@ -60,3 +60,8 @@ def toggle(request):
 def doorImage(request):
     image = door.getDoorImage()
     return HttpResponse(image, content_type="image/jpeg")
+
+@login_required
+def cvImage(request):
+    image = open(door.CV_IMAGE_PATH).read()
+    return HttpResponse(image, content_type='image/jpeg')

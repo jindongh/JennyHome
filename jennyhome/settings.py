@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 import os
 from .config import *
 from blink import Blink
+import boto3
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -26,8 +27,7 @@ SECRET_KEY = '4=f#0$a87r$z)bx2!0_3iv4y+oeqqxzag38fk@k0onym2asu%m'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [u'jennyhome.tk']
-
+ALLOWED_HOSTS = [DOMAIN]
 
 # Application definition
 
@@ -152,3 +152,8 @@ EMAIL_PORT = 587
 
 BLINK = Blink(BLINK_EMAIL, BLINK_PASSWORD)
 BLINK.connect()
+
+boto3.setup_default_session(
+        aws_access_key_id = AWS_ACCESS_KEY_ID,
+        aws_secret_access_key = AWS_SECRET_ACCESS_KEY,
+        region_name=AWS_DEFAULT_REGION)

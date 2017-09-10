@@ -7,6 +7,7 @@ import time
 DOOR_OPEN = 'Open'
 DOOR_CLOSE = 'Close'
 DOOR_UNKNOWN = 'Unknown'
+CV_IMAGE_PATH = '/tmp/%s/cv.jpg' % settings.DOMAIN
 DOOR_PIN = 17
 
 def toggleDoor():
@@ -35,7 +36,7 @@ def getDoorStateFromCV():
     start_pixel = (640, 310)
     diff = (3,3,3)
     retval, rect = cv2.floodFill(img, mask, start_pixel, (0,255,0), diff, diff)
-    cv2.imwrite('/tmp/cv_result.jpg', img)
+    cv2.imwrite(CV_IMAGE_PATH, img)
     print retval
     if retval > 5000:
         return DOOR_CLOSE
