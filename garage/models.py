@@ -9,8 +9,8 @@ class GarageOp(models.Model):
 
     class Meta:
         permissions = (
-                ('check_garage', 'Can see garage status'),
-                ('operate_garage', 'Can operate garage'),
+                ('check', 'Can see garage status'),
+                ('operate', 'Can operate garage'),
                 )
     def __str__(self):
         return '%s %s %s' % (self.op_date,

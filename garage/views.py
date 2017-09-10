@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 
 # Create your views here.
 @login_required
-@permission_required('garage.check_garage')
+@permission_required('garage.check')
 def home(request):
     history = GarageOp.objects.order_by('-op_date')[:10]
     curState = door.getDoorStateFromDB()
@@ -24,7 +24,7 @@ def home(request):
     return render(request, 'garage/home.html', context)
 
 @login_required
-@permission_required('garage.check_garage')
+@permission_required('garage.check')
 def state(request):
     stateByDB = door.getDoorStateFromDB()
     stateByCV = door.getDoorStateFromCV()
@@ -34,7 +34,7 @@ def state(request):
         })
 
 @login_required
-@permission_required('garage.operate_garage')
+@permission_required('garage.operate')
 def toggle(request):
     logger.info('Try to toggle garage door')
     succeed = False
@@ -61,13 +61,13 @@ def toggle(request):
         })
 
 @login_required
-@permission_required('garage.check_garage')
+@permission_required('garage.check')
 def doorImage(request):
     image = door.getDoorImage()
     return HttpResponse(image, content_type="image/jpeg")
 
 @login_required
-@permission_required('garage.check_garage')
+@permission_required('garage.check')
 def cvImage(request):
     image = open(door.CV_IMAGE_PATH).read()
     return HttpResponse(image, content_type='image/jpeg')
