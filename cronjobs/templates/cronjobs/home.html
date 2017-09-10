@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block javascript %}
+<script>
+var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+function showExecutions(jobId) {
+	$.ajax({
+		url: '/cronjobs/api/executions',
+		type: 'GET',
+		headers: {
+			'X-CSRFToken': csrftoken
+		},
+		data: '{}',
+		dataType: 'json',
+		data: {'job':jobId}
+	}).done(function(data) {
+		$(data).each(function(i, job){
+			var div='<div>'
+				+ job.run_time + '&nbsp;&nbsp;'
+				+ job.status
+				+ '</div>';
+			$("#executionList").append(div);
+		});
+	});
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<h2>Cronjobs</h2>
+{% for job in jobs %}
+{{ job.name }}
+{{ job.next_run_time }}
+<a href="#" onclick="showExecutions('{{job.id}}');">Executions</a>
+{% endfor %}
+
+<div id="executionList">
+</div>
+{% endblock %}

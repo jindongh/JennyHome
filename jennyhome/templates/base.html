@@ -21,7 +21,7 @@
 						<li {% if '/' == request.path %} class="active"{% endif %}><a href="/">Home</a></li>
 						<li {% if '/garage/' in request.path %} class="active"{% endif %}><a href="/garage/">Garage</a></li>
 						<li {% if '/note/' in request.path %} class="active"{% endif %}><a href="/note/">Note</a></li>
-						<li {% if '/reminder/' in request.path %} class="active"{% endif %}><a href="/reminder/">Reminder</a></li>
+						<li {% if '/cronjobs/' in request.path %} class="active"{% endif %}><a href="/cronjobs/">CronJobs</a></li>
 					</ul>
 					{% if request.user.is_authenticated %}
 						{% if request.user.social_auth.count > 0 %}

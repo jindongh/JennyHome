@@ -1,3 +1,4 @@
+APScheduler==3.3.1
 Django==1.11.5
 PyJWT==1.5.3
 PyYAML==3.12
@@ -5,6 +6,9 @@ RPi.GPIO==0.6.3
 argparse==1.2.1
 certifi==2017.7.27.1
 chardet==3.0.4
+django-apscheduler==0.2.1
+funcsigs==1.0.2
+futures==3.1.1
 idna==2.6
 imutils==0.4.3
 numpy==1.13.1
@@ -17,5 +21,6 @@ requests-oauthlib==0.8.0
 six==1.10.0
 social-auth-app-django==1.2.0
 social-auth-core==1.4.0
+tzlocal==1.4
 urllib3==1.22
 wsgiref==0.1.2
