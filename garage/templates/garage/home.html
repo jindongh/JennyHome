@@ -2,8 +2,11 @@
 
 {% block javascript %}
 <script>
+var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+function showDoor() {
+	$("#doorImage").attr("src", "/garage/api/image");
+}
 function toggleDoor() {
-	var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
 	$.ajax({
 		url: '/garage/api/toggle',
 		type: 'POST',
@@ -21,6 +24,9 @@ function toggleDoor() {
 {% endblock %}
 
 {% block content %}
+<table>
+	<tr><td>
+
 <h2> Garage State: <span class="garageState {{state}}">{{ state }} </span></h2>
 
 <h2> Open/Close: <a href="#" onclick="javascript:toggleDoor();">{{ action }}</a>
@@ -43,4 +49,12 @@ function toggleDoor() {
 	</tr>
 	{% endfor %}
 </table>
+</td><td>
+	<a href="#" onclick="showDoor();">Door Snapchat</a>
+	<div id="doorImageDiv">
+		<img id="doorImage" width="640" height="360" src="" />
+	</div>
+			</td></tr>
+</table>
+
 {% endblock %}
