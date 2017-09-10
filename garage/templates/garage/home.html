@@ -1,10 +1,16 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block javascript %}
 <script>
 var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
 function showDoor() {
-	$("#doorImage").attr("src", "/garage/api/image");
+	$("#doorImage").attr("src", "{% static 'img/loading.gif' %}");
+	var imageUrl='api/image?time='+Math.random();
+	var img = $("<img />").attr('src', imageUrl)
+		.on('load', function() {
+			$("#doorImage").attr("src", imageUrl);
+		});
 }
 function toggleDoor() {
 	$.ajax({

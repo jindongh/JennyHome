@@ -35,7 +35,9 @@ def getDoorStateFromCV():
     start_pixel = (640, 310)
     diff = (3,3,3)
     retval, rect = cv2.floodFill(img, mask, start_pixel, (0,255,0), diff, diff)
-    if retval > 10000:
+    cv2.imwrite('/tmp/cv_result.jpg', img)
+    print retval
+    if retval > 5000:
         return DOOR_CLOSE
     else:
         return DOOR_OPEN

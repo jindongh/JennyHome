@@ -3,7 +3,7 @@ from django.shortcuts import render
 from models import GarageOp
 from django.http import HttpResponse
 from django.http import JsonResponse
-from datetime import datetime
+from django.utils import timezone
 import logging
 import door
 logger = logging.getLogger(__name__)
@@ -44,7 +44,7 @@ def toggle(request):
         message = str(e)
     op = GarageOp(
             op_type = newState,
-            op_date = datetime.now(),
+            op_date = timezone.now(),
             op_succeed = succeed,
             error_message = message
             )

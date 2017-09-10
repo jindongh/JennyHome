@@ -14,6 +14,7 @@ function showExecutions(jobId) {
 		dataType: 'json',
 		data: {'job':jobId}
 	}).done(function(data) {
+		$("#executionList").html('');
 		$(data).each(function(i, job){
 			var div='<div>'
 				+ job.run_time + '&nbsp;&nbsp;'

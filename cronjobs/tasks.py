@@ -10,7 +10,7 @@ scheduler.add_executor(ThreadPoolExecutor(10))
 @scheduler.scheduled_job('interval',
         id='VerifyGarageDoorIsClose',
         days=1,
-        start_date='2017-01-01 22:00:00')
+        start_date='2017-09-01 22:00:30')
 
 def doorIsOpen():
     print('Door is Open/Close')
