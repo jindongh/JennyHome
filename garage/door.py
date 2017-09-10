@@ -1,14 +1,21 @@
 from django.conf import settings
 from models import GarageOp
+import RPi.GPIO as GPIO
 import cv2, numpy
+import time
 
 DOOR_OPEN = 'Open'
 DOOR_CLOSE = 'Close'
 DOOR_UNKNOWN = 'Unknown'
+DOOR_PIN = 17
 
 def toggleDoor():
     curState = getDoorStateFromDB()
-    # TODO
+    if GPIO.getmode() == None:
+        GPIO.setmode(GPIO.BCM)
+    GPIO.setup(17, GPIO.OUT)
+    GPIO.output(17, GPIO.HIGH)
+    GPIO.output(17, GPIO.LOW)
     newState = toggleDoorState(curState)
     return newState
 
