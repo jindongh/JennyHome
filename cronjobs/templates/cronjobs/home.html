@@ -3,7 +3,10 @@
 {% block javascript %}
 <script>
 var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
-function showExecutions(jobId) {
+function showExecutions(jobId, jobName) {
+	if ($("#collapse"+jobName).hasClass('in')) {
+		return;
+	}
 	$.ajax({
 		url: '/cronjobs/api/executions',
 		type: 'GET',
@@ -14,13 +17,13 @@ function showExecutions(jobId) {
 		dataType: 'json',
 		data: {'job':jobId}
 	}).done(function(data) {
-		$("#executionList").html('');
+		$("#data"+jobName).html('');
 		$(data).each(function(i, job){
-			var div='<div>'
+			var item = '<a href="#" class="list-group-item">'
 				+ job.run_time + '&nbsp;&nbsp;'
 				+ job.status
-				+ '</div>';
-			$("#executionList").append(div);
+				+ '</a>';
+			$("#data"+jobName).append(item);
 		});
 	});
 }
@@ -29,12 +32,19 @@ function showExecutions(jobId) {
 
 {% block content %}
 <h2>Cronjobs</h2>
-{% for job in jobs %}
-{{ job.name }}
-{{ job.next_run_time }}
-<a href="#" onclick="showExecutions('{{job.id}}');">Executions</a>
-{% endfor %}
 
-<div id="executionList">
+<div class="panel-group">
+	{% for job in jobs %}
+	<div class="panel panel-default">
+		<a class="list-group-item" data-toggle="collapse" href="#collapse{{job.name}}" onclick="showExecutions('{{job.id}}','{{job.name}}');">
+			<span class="badge">{{job.next_run_time}}</span>
+			{{ job.name }}
+		</a>
+		<div class="panel-collapse collapse" id="collapse{{job.name}}">
+			<div class="panel-body" id="data{{job.name}}">
+			</div>
+		</div>
+	</div>
+	{% endfor %}
 </div>
 {% endblock %}
