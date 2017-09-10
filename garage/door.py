@@ -14,8 +14,9 @@ def toggleDoor():
     curState = getDoorStateFromDB()
     if GPIO.getmode() == None:
         GPIO.setmode(GPIO.BCM)
-    GPIO.setup(17, GPIO.OUT)
+        GPIO.setup(17, GPIO.OUT)
     GPIO.output(17, GPIO.HIGH)
+    time.sleep(1) # Delay is necessary, otherwise it will not work.
     GPIO.output(17, GPIO.LOW)
     newState = toggleDoorState(curState)
     return newState
