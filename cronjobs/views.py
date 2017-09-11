@@ -15,10 +15,13 @@ def home(request):
 
 def executions(request):
     jobId = request.GET['job'];
-    execs = DjangoJobExecution.objects.filter(job__id=jobId)
+    execs = DjangoJobExecution.objects.filter(job__id=jobId)[:10]
     resp = [{
         'status': execution.status,
         'run_time': timezone.localtime(execution.run_time),
+        'exception': execution.exception,
+        'traceback': execution.traceback,
+        'retval': execution.retval,
         } for execution in execs]
     return JsonResponse(resp, safe=False)
 

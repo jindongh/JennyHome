@@ -24,9 +24,14 @@ def doorIsOpen():
         sns.publish(
                 PhoneNumber=settings.phone,
                 Message='Garage door is OPEN %s' % url)
+    return 'Door is open and notified %s' % ','.join(settings.ADMIN_PHONES)
 
+@scheduler.scheduled_job('interval',
+        id='testJob',
+        weeks = 54,
+        start_date='2017-09-01 00:00:00')
 def is_door_close():
-    print 'Door is closed'
+    return 'MyResponse'
 
 register_events(scheduler)
 scheduler.start()

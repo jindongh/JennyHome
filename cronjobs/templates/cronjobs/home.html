@@ -19,10 +19,21 @@ function showExecutions(jobId, jobName) {
 	}).done(function(data) {
 		$("#data"+jobName).html('');
 		$(data).each(function(i, job){
-			var item = '<a href="#" class="list-group-item">'
-				+ job.run_time + '&nbsp;&nbsp;'
-				+ job.status
-				+ '</a>';
+			var item = '<div href="#" class="list-group-item">'
+				+ job.run_time + '&nbsp;&nbsp;';
+			if (job.status == 'Executed') {
+				item += '<font color="green">' + job.status + '</font>&nbsp;'
+					+ '<pre>' + job.retval + '</pre>';
+			} else {
+				if (job.status == 'Error!') {
+					item += '<font color="red">' + job.status + '</font>&nbsp;';
+				} else {
+					item += '<font color="red">' + job.status + '</font>&nbsp;';
+				}
+				item += job.exception
+					+ '<pre>' + job.traceback + '</pre>';
+			}
+			item += '</div>';
 			$("#data"+jobName).append(item);
 		});
 	});
