@@ -1,7 +1,25 @@
+# Domain
+DOMAIN = 'mydomain.com'
+ADMIN_PHONES = [ '+12060000000',
+        ]
+
 # Email.
-EMAIL_HOST_USER = 'xxxxxx@gmail.com'
-EMAIL_HOST_PASSWORD = 'xxxxxx'
+EMAIL_HOST_USER = 'username@gmail.com'
+EMAIL_HOST_PASSWORD = 'password'
+
+# AWS
+AWS_ACCESS_KEY_ID = 'access_key'
+AWS_SECRET_ACCESS_KEY = 'secret-key'
+AWS_DEFAULT_REGION = 'us-east-1'
+
+# Blink
+BLINK_EMAIL = 'username@domain.com'
+BLINK_PASSWORD = 'password'
 
 # Google
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = 'key'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = 'secret'
 
 # Github
+SOCIAL_AUTH_GITHUB_KEY = 'key'
+SOCIAL_AUTH_GITHUB_SECRET = 'secret'
