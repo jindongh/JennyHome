@@ -5,7 +5,7 @@
 var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
 function addNoteToTable(noteId, content, addToTop) {
 	var div='<div class="well" id="note'+noteId+'">'
-		+ '<span id="noteContent'+noteId+'">'+content+'</span>&nbsp;&nbsp;'
+		+ '<pre id="noteContent'+noteId+'">'+content+'</pre>&nbsp;&nbsp;'
 		+ '<a href="#" onclick="removeNote(\''+noteId+'\');">Remove</a>&nbsp;&nbsp;'
 		+ '<a href="#" onclick="editNote(\''+noteId+'\');">Edit</a>'
 		+ '</div>';

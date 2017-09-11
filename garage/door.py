@@ -34,7 +34,7 @@ def getDoorStateFromCV():
     img = cv2.imdecode(img_array, cv2.CV_LOAD_IMAGE_COLOR)
     height, width, channels = img.shape
     mask = numpy.zeros((height+2, width+2), numpy.uint8)
-    start_pixel = (640, 310)
+    start_pixel = (740, 310)
     diff = (3,3,3)
     retval, rect = cv2.floodFill(img, mask, start_pixel, (0,255,0), diff, diff)
     cv2.imwrite(CV_IMAGE_PATH, img)

@@ -22,7 +22,7 @@ def doorIsOpen():
     url = 'http://%s/garage/api/cv' % (settings.DOMAIN)
     for phone in settings.ADMIN_PHONES:
         sns.publish(
-                PhoneNumber=settings.phone,
+                PhoneNumber=phone,
                 Message='Garage door is OPEN %s' % url)
     return 'Door is open and notified %s' % ','.join(settings.ADMIN_PHONES)
 
