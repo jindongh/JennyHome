@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^$', views.home, name='home'),
     url(r'^garage/', include('garage.urls')),
     url(r'^note/', include('note.urls')),
+    url(r'^baby/', include('baby.urls')),
     url(r'^cronjobs/', include('cronjobs.urls')),
 
     url('^', include('django.contrib.auth.urls')),
