@@ -9,5 +9,6 @@ class Note(models.Model):
     user = models.ForeignKey(User)
     content = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
+    finished = models.BooleanField(default = False)
     def __str__(self):
         return '%s %s' % (self.date, self.content)
