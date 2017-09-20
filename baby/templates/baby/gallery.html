@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block javascript %}
+<script>
+var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+function addPhoto(photo) {
+	$("#photoList").append('<div id="photo'+photo.id+'">'
+			+ '<img width="500" src="'+photo.url+'"'
+			+ '	alt="'+photo.description+'"/>'
+			+ '<a href="#" onclick=deletePhoto("'+photo.id+'")>Delete</a>'
+			+ '</div>'
+			);
+}
+
+function deletePhoto(photoId) {
+	$.ajax({
+		url: "/baby/api/delete/"+photoId,
+		type: "POST",
+		headers: {
+			'X-CSRFToken': csrftoken
+		},
+		success: function(response) {
+			$("#photo"+photoId).remove();
+		}
+	});
+}
+function uploadPhoto() {
+	var fd = new FormData();
+	var image = $('#image')[0].files[0];
+	fd.append('image', image);
+	fd.append('description', $("#description").val());
+
+	$.ajax({
+		url: "/baby/api/upload/{{gallery.id}}",
+		type: "POST",
+		headers: {
+			'X-CSRFToken': csrftoken
+		},
+		data: fd,
+		processData: false,
+		contentType: false,
+		success: function(response) {
+			if (response.succeed) {
+				addPhoto(response.photo);
+			} else {
+				$("#error").html(response.message);
+				alert(response.message);
+			}
+		},
+		error: function(jqXHR, textStatus, errorMessage) {
+			$("#error").html(errorMessage);
+		}
+	});
+}
+$(document).ready(function(){
+	$("#uploadPhoto").click(function(){
+		uploadPhoto();
+	});
+	$.ajax({
+		url: "/baby/api/list/{{gallery.id}}",
+		type: 'GET',
+		headers: {
+			'X-CSRFToken': csrftoken
+		},
+		success: function(response) {
+			$(response).each(function(id, photo) {
+				addPhoto(photo);
+			});
+		},
+		error: function(jqXHR, textStatus, errorMessage) {
+			$("#error").html('Failed to get photos, reason:'+errorMessage);
+		}
+	});
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<h3><a href='/baby/'>All</a> >> {{gallery.name}}</h3>
+<div id="photoList">
+</div>
+
+<div style="color: red;" id="error"></div>
+<input type="file" name="image" id="image" accept="Image/*" />
+<input type="text" name="description" id="description" />
+<input type="button" id="uploadPhoto" value="Upload" />
+
+{% endblock %}

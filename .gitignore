@@ -4,3 +4,5 @@ db.sqlite3
 env/
 jennyhome/config.py
 pic_folder/
+hjz.out
+hjz.err
