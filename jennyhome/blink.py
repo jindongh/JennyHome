@@ -145,12 +145,24 @@ class Blink(object):
     events = [Event(**event) for event in events]
     return events
 
+  def httpget(self, url, **kwargs):
+    resp = requests.get(url, **kwargs)
+    if 'code' in resp.json():
+      if resp.json()['code'] == 101 and not 'noretry' in kwargs:
+        self._authtoken = None
+        self._connect_if_needed()
+        return self.httpget(url, noretry=True, **kwargs)
+    return resp
+
   def cameras(self, network, type='motion'):
     self._connect_if_needed()
-    resp = requests.get(self._path('network/%s/cameras' % network.id), headers=self._auth_headers)
-    cameras = resp.json()['devicestatus']
-    cameras = [Camera(**camera) for camera in cameras]
-    return cameras
+    resp = self.httpget(self._path('network/%s/cameras' % network.id), headers=self._auth_headers)
+    if 'devicestatus' in resp.json():
+      cameras = resp.json()['devicestatus']
+      cameras = [Camera(**camera) for camera in cameras]
+      return cameras
+    else:
+      raise Exception(resp.json())
   
   def download_video(self, event):
     '''
