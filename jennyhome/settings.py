@@ -10,7 +10,6 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 from .config import *
-from blink import Blink
 import boto3
 
 
@@ -150,9 +149,6 @@ STATIC_URL = '/static/'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
-
-BLINK = Blink(BLINK_EMAIL, BLINK_PASSWORD)
-BLINK.connect()
 
 boto3.setup_default_session(
         aws_access_key_id = AWS_ACCESS_KEY_ID,

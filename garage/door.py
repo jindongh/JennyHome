@@ -1,5 +1,6 @@
 from django.conf import settings
 from models import GarageOp
+from blink import Blink
 import RPi.GPIO as GPIO
 import cv2, numpy
 import time
@@ -35,7 +36,7 @@ def getDoorStateFromCV():
     height, width, channels = img.shape
     mask = numpy.zeros((height+2, width+2), numpy.uint8)
     start_pixel = (740, 310)
-    diff = (3,3,3)
+    diff = (4,4,4)
     retval, rect = cv2.floodFill(img, mask, start_pixel, (0,255,0), diff, diff)
     cv2.imwrite(CV_IMAGE_PATH, img)
     print retval
@@ -51,7 +52,8 @@ def toggleDoorState(curState):
         return DOOR_OPEN
 
 def getDoorImage():
-    blink = settings.BLINK
+    blink = Blink(settings.BLINK_EMAIL, settings.BLINK_PASSWORD)
+    blink.connect()
     network = blink.network('Home')
     camera = blink.camera(network, 'Garage')
     thumb = blink.capture_thumbnail(camera)

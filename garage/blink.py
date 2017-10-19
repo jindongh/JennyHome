@@ -146,9 +146,11 @@ class Blink(object):
     return events
 
   def httpget(self, url, **kwargs):
+    need_retry = not 'noretry' in kwargs
+    kwargs.pop('noretry', None)
     resp = requests.get(url, **kwargs)
     if 'code' in resp.json():
-      if resp.json()['code'] == 101 and not 'noretry' in kwargs:
+      if resp.json()['code'] == 101 and need_retry:
         self._authtoken = None
         self._connect_if_needed()
         return self.httpget(url, noretry=True, **kwargs)
