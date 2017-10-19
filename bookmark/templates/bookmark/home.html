@@ -70,7 +70,6 @@ function showCategory(categoryId) {
 			'X-CSRFToken': csrftoken
 		}
 	}).done(function(data) {
-		console.log(JSON.stringify(data));
 		$("#categoryId").attr('value', categoryId);
 		$(data).each(function(index, item) {
 			addBookmarkNode(item);
@@ -79,8 +78,8 @@ function showCategory(categoryId) {
 }
 
 function addBookmarkNode(data) {
-	$("#bookmarkList").append('<li id="bookmark'+data.id+'"><a href="/bookmark/access/' + data.id + '"'
-			+ ' alt="' + data.link + '" target="_blank">' + data.name + '</a>&nbsp;'
+	$("#bookmarkList").append('<li id="bookmark'+data.id+'"><a target="_blank" href="'+data.link+'"'
+			+ ' onmousedown=\'$(this).attr("href","/bookmark/access/'+data.id + '");\'>' + data.name + '</a>&nbsp;'
 			+ 'Click:'+data.click+'&nbsp;'
 			+ '<a href="#" onclick="deleteBookmark('+data.id+');">Delete</a></li>');
 }
