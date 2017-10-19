@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'note',
     'cronjobs',
     'baby',
+    'bookmark',
 ]
 
 MIDDLEWARE = [

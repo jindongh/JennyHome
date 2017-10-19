@@ -1,0 +1,206 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block javascript %}
+<script>
+var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+function addCategory() {
+	editCategory('', '');
+}
+function accessBookmark(bookmarkId) {
+	window.open('/bookmark/access/'+bookmarkId);
+}
+function editCategory(categoryId, categoryName) {
+	$("#categoryId").attr('value', categoryId);
+	$("#categoryName").val(categoryName);
+	$("#categoryModal").modal('show');
+}
+function addCategoryNode(data) {
+	var category = '<li class="category" id="category'+data.id+'">'
+			+ '<a href="#" onclick="showCategory('+data.id+');">'+data.name+'</a></li>';
+	$("#categoryList li").last().prev().after(category);
+}
+function saveCategory(){
+	$.ajax({
+		url: '/bookmark/api/category/edit',
+		type: 'POST',
+		headers: {
+			'X-CSRFToken': csrftoken
+		},
+		data: {
+			'id': $("#categoryId").val(),
+			'parent': $("#parentId").val(),
+			'name': $("#categoryName").val()
+		}
+	}).done(function(data) {
+		addCategoryNode(data);
+		$("#categoryModal").modal('hide');
+		showCategory(data.id);
+	});
+}
+
+function deleteCategory() {
+	var categoryId = $("#categoryId").val();
+	$.ajax({
+		url: '/bookmark/api/category/delete/'+categoryId,
+		type: 'GET',
+		dataType: 'json',
+		headers: {
+		}
+	}).done(function(data) {
+		$("#category"+data.id).remove();
+		showCategory(-1);
+	});
+}
+
+function showCategory(categoryId) {
+	$(".category").removeClass('active');
+	$("#category"+categoryId).addClass('active');
+	if (categoryId == -1) {
+		$("#removeCategory").hide();
+	} else {
+		$("#removeCategory").show();
+	}
+	$("#bookmarkList").empty();
+	$.ajax({
+		url: '/bookmark/api/category/'+categoryId,
+		type: 'GET',
+		dataType: 'json',
+		headers: {
+			'X-CSRFToken': csrftoken
+		}
+	}).done(function(data) {
+		console.log(JSON.stringify(data));
+		$("#categoryId").attr('value', categoryId);
+		$(data).each(function(index, item) {
+			addBookmarkNode(item);
+		});
+	});
+}
+
+function addBookmarkNode(data) {
+	$("#bookmarkList").append('<li id="bookmark'+data.id+'"><a href="/bookmark/access/' + data.id + '"'
+			+ ' alt="' + data.link + '" target="_blank">' + data.name + '</a>&nbsp;'
+			+ 'Click:'+data.click+'&nbsp;'
+			+ '<a href="#" onclick="deleteBookmark('+data.id+');">Delete</a></li>');
+}
+
+function addBookmark() {
+	editBookmark('', '', '');
+}
+
+function editBookmark(bookmarkId, bookmarkName, bookmarkLink) {
+	$("#bookmarkId").val(bookmarkId);
+	$("#bookmarkName").val(bookmarkName);
+	$("#bookmarkLink").val(bookmarkLink);
+	$("#bookmarkModal").modal('show');
+}
+
+function saveBookmark() {
+	$.ajax({
+		url: '/bookmark/api/bookmark/edit/' + $("#categoryId").val(),
+		type: 'POST',
+		dataType: 'json',
+		headers: {
+			'X-CSRFToken': csrftoken
+		},
+		data: {
+			'id': $("#bookmarkId").val(),
+			'name': $("#bookmarkName").val(),
+			'link': $("#bookmarkLink").val()
+		}
+	}).done(function(data) {
+		addBookmarkNode(data);
+		$("#bookmarkModal").modal('hide');
+	});
+}
+
+function deleteBookmark(bookmarkId) {
+	$.ajax({
+		url: '/bookmark/api/bookmark/delete/' + bookmarkId,
+		type: 'GET',
+		dataType: 'json',
+		headers: {
+			'X-CSRFToken': csrftoken
+		}
+	}).done(function(data) {
+		$("#bookmark"+bookmarkId).remove();
+	});
+}
+
+$(document).ready(function(){
+	$("#saveCategory").on('click', saveCategory);
+	$("#saveBookmark").click(saveBookmark);
+	showCategory(-1);
+});
+
+</script>
+
+{% endblock %}
+
+{% block content %}
+<div id="main">
+	<nav class="navbar navbar-default">
+		<div class="container-fluid">
+			<ul id="categoryList" class="nav navbar-nav">
+				<li class="category" id="category-1"><a href="#" onclick="showCategory(-1);">Hot</a></li>
+				{% for category in categories %}
+				<li class="category" id="category{{category.id}}"><a href="#" onclick="showCategory('{{category.id}}');">{{category.name}}</a></li>
+				{% endfor %}
+				<li><a href="#" onclick="addCategory()">+</a></li>
+			</ul>
+		</div>
+	</div>
+
+	<div id="content">
+		<div id="removeCategory">
+			<a href="#" onclick="deleteCategory()">Delete Category</a>&nbsp;
+			<a href="#" onclick="addBookmark()">Add Bookmark</a>
+		</div>
+		<ul id="bookmarkList">
+		</ul>
+	</div>
+</div>
+
+<div id="categoryModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Category Order</h4>
+			</div>
+			<div class="modal-body">
+				<input type="hidden" id="categoryId" />
+				Name:<input type="text" id="categoryName"> <br/>
+				<div id="errorMessage"></div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" id="saveCategory">Save</button>
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="bookmarkModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Bookmark</h4>
+			</div>
+			<div class="modal-body">
+				<input type="hidden" id="bookmarkId" />
+				Name:<input type="text" id="bookmarkName"><br/>
+				<div id="errorMessage"/>
+				Link:<input type="text" id="bookmarkLink"><br/>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn bt-default" id="saveBookmark">Save</button>
+				<button type="button" class="btn bt-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

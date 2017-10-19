@@ -12,6 +12,7 @@ urlpatterns = [
     url(r'^note/', include('note.urls')),
     url(r'^baby/', include('baby.urls')),
     url(r'^cronjobs/', include('cronjobs.urls')),
+    url(r'^bookmark/', include('bookmark.urls')),
 
     url('^', include('django.contrib.auth.urls')),
     url(r'^admin/', admin.site.urls),
