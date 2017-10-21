@@ -7,12 +7,12 @@ from .models import Category, Bookmark
 
 # Create your views here.
 def home(request):
-    categories = Category.objects.all()
+    categories = Category.objects.filter(user=_getUser(request))
     return render(request, 'bookmark/home.html', { 'categories': categories })
 
 def list_bookmark(request, categoryId):
     if categoryId == '-1':
-        bookmarks = Bookmark.objects.filter(user=request.user).order_by('-click')[:10]
+        bookmarks = Bookmark.objects.filter(user=_getUser(request)).order_by('-click')[:10]
     else:
         bookmarks = Bookmark.objects.filter(category = Category.objects.get(pk=categoryId))
     return JsonResponse([_bookmark2Json(bookmark) for bookmark in bookmarks], safe=False)
@@ -24,7 +24,7 @@ def edit_category(request):
         category.name = name
     else:
         category = Category(
-                user = request.user,
+                user = _getUser(request),
                 name = name)
     category.save()
     return JsonResponse(_category2Json(category))
@@ -39,7 +39,7 @@ def edit_bookmark(request, categoryId):
         bookmark.link = link
     else:
         bookmark = Bookmark(
-                user = request.user,
+                user = _getUser(request),
                 category = category,
                 name = name,
                 link = link)
@@ -62,6 +62,9 @@ def access_bookmark(request, bookmarkId):
     bookmark.click += 1
     bookmark.save()
     return redirect(bookmark.link)
+
+def _getUser(request):
+    return request.user.is_active and request.user or None
 
 def _category2Json(category):
     return {

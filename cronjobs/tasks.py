@@ -13,7 +13,7 @@ sns=boto3.client('sns')
 
 @scheduler.scheduled_job('interval',
         id='VerifyGarageDoorIsClose',
-        hours=1,
+        days=1,
         start_date='2017-09-01 22:00:30')
 def doorIsOpen():
     state = door.getDoorStateFromCV()

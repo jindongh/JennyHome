@@ -7,12 +7,13 @@ function addNoteToTable(divId, note, addToTop) {
 	var idPrefix = note.finished ? 'history': 'note';
 	var div='<div class="well" id="'+idPrefix + note.id+'">'
 		+ '<pre id="noteContent'+note.id+'">'+note.content+'</pre>&nbsp;&nbsp;'
-		+ '<a href="#" onclick="removeNote(\''+note.id+'\');">Remove</a>&nbsp;&nbsp;'
-		+ '<a href="#" onclick="editNote(\''+note.id+'\');">Edit</a>&nbsp;&nbsp;';
 	if (!note.finished) {
-		div += '<a href="#" onclick="finishNote(\''+note.id+'\');">Finish</a>';
+		div += '<a href="#" onclick="return removeNote(\'#note\', \''+note.id+'\');">Remove</a>&nbsp;&nbsp;';
+		div += '<a href="#" onclick="editNote(\''+note.id+'\');">Edit</a>&nbsp;&nbsp;';
+		div += '<a href="#" onclick="return finishNote(\''+note.id+'\');">Finish</a>';
 	} else {
-		div += '<a href="#" onclick="resetNote(\''+note.id+'\');">Reset</a>';
+		div += '<a href="#" onclick="return removeNote(\'#history\', \''+note.id+'\');">Remove</a>&nbsp;&nbsp;';
+		div += '<a href="#" onclick="return resetNote(\''+note.id+'\');">Reset</a>';
 	}
 	div += '</div>';
 	if (addToTop) {
@@ -23,6 +24,7 @@ function addNoteToTable(divId, note, addToTop) {
 }
 function removeNoteFromTable(divPrefix, noteId) {
 	$(divPrefix+noteId).remove();
+	return false;
 }
 function addNote() {
 	$.ajax({
@@ -37,7 +39,7 @@ function addNote() {
 		$("#content").val('');
 	});
 }
-function removeNote(noteId) {
+function removeNote(divPrefix, noteId) {
 	$.ajax({
 		url: 'api/remove/',
 		type: 'POST',
@@ -46,8 +48,9 @@ function removeNote(noteId) {
 		},
 		data: {'id': noteId},
 	}).done(function(data) {
-		removeNoteFromTable('#note', noteId);
+		removeNoteFromTable(divPrefix, noteId);
 	});
+	return false;
 }
 
 function finishNote(noteId) {
@@ -62,6 +65,7 @@ function finishNote(noteId) {
 		removeNoteFromTable('#note', noteId);
 		addNoteToTable('#historyList', data, true);
 	});
+	return false;
 }
 function resetNote(noteId) {
 	$.ajax({
@@ -75,6 +79,7 @@ function resetNote(noteId) {
 		removeNoteFromTable('#history', noteId);
 		addNoteToTable('#noteList', data, true);
 	});
+	return false;
 }
 function editNote(noteId) {
 	var content = $("#noteContent"+noteId).text();

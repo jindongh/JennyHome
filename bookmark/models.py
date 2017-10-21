@@ -6,11 +6,11 @@ from django.db import models
 
 # Create your models here.
 class Category(models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, null=True)
     name = models.TextField()
 
 class Bookmark(models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, null=True)
     category = models.ForeignKey(Category)
     name = models.TextField()
     link = models.TextField()
