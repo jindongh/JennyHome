@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block javascript %}
 <script>
@@ -41,6 +42,8 @@ function listScripts(){
 }
 
 function loadScript(scriptId) {
+	$("#loadingDiv").hide();
+	$("#loadedDiv").hide();
 	$.ajax({
 		url: 'api/get/'+scriptId,
 		headers: {
@@ -79,8 +82,19 @@ function saveScript() {
 		setScriptItem(data.id, data.name);
 	});
 }
-
+function showResult(code, stdout, stderr, images) {
+	$("#code").html(code);
+	$("#stdout").html(stdout);
+	$("#stderr").html(stderr);
+	$("#imageList").empty();
+	$.map(images, function(value,key){
+		$("#imageList").append('<img alt="' + key + '" src="data:image/jpeg;base64,' + value + '"/>');
+	});
+}
 function executeScript() {
+	$("#loadingDiv").show();
+	$("#loadedDiv").hide();
+	showResult('','','',{});
 	$.ajax({
 		url: 'api/execute/',
 		type: 'POST',
@@ -91,9 +105,9 @@ function executeScript() {
 			script: $("#scriptCode").val()
 		}
 	}).done(function(data) {
-		$("#code").html(data.code);
-		$("#stdout").html(data.stdout);
-		$("#stderr").html(data.stderr);
+		$("#loadingDiv").hide();
+		$("#loadedDiv").show();
+		showResult(data.code, data.stdout, data.stderr, data.images);
 	});
 };
 
@@ -110,22 +124,39 @@ $(document).ready(function(){
 
 {% block content %}
 <div class="row">
-	<div class="sidebar col-sm-2">
+	<div class="sidebar col-sm-3">
 		<ul id="scriptList" class="nav nav-sidebar">
 		</ul>
 	</div>
-	<div class="main col-sm-8">
-		<input type='hidden' id="scriptId"></input>
-		Name:<input type="text" id="scriptName"></input>
-		<textarea id="scriptCode" width="100%" height="50%"></textarea>
-		<input type="button" id="newButton" value="New" />
-		<input type="button" id="saveButton" value="Save" />
-		<input type="button" id="delButton" value="Delete" />
-		<input type="button" id="execButton" value="Execute" />
-		<hr/>
-		Code:<pre id="code"></pre>
-		Stdout:<pre id="stdout"></pre>
-		Stderr:<pre id="stderr" style="color:red;"></pre>
+	<div class="main col-sm-9">
+		<div class="row">
+			<div class="col-sm-9">
+				<input type='hidden' id="scriptId"></input>
+				<div class="row">
+					Name:<input type="text" id="scriptName" style="display:table-cell; width:90%;"></input>
+				</div>
+				<div class="row">
+					Code:<textarea id="scriptCode" style="display:table-cell; width: 90%; height: 300px;"></textarea>
+				</div>
+			</div>
+			<div class="col-sm-1">
+				<input type="button" id="newButton" value="New" class="btn btn-primary" />
+				<input type="button" id="saveButton" value="Save" class="btn btn-success"/>
+				<input type="button" id="delButton" value="Delete" class="btn btn-danger"/>
+				<input type="button" id="execButton" value="Execute" class="btn btn-success"/>
+			</div>
+		</div>
+		<div class="row">
+			<div id="loadingDiv" style="display:none">
+				<img src="{% static 'img/loading.gif' %}"/>
+			</div>
+			<div id="loadedDiv" style="display:none">
+				Code:<pre id="code"></pre>
+				Stdout:<pre id="stdout"></pre>
+				Stderr:<pre id="stderr" style="color:red;"></pre>
+				Images:<ul id="imageList"></ul>
+			</div>
+		</div>
 	</div>
 </div>
 {% endblock %}

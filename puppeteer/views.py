@@ -12,7 +12,7 @@ def home(request):
     return render(request, 'puppeteer/home.html')
 
 def execute(request):
-    URL='http://127.0.0.1:8080'
+    URL='http://127.0.0.1:10000'
     data = {'id': str(uuid.uuid4()),
             'script': request.POST['script']}
     try:

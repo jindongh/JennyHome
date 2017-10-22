@@ -1,5 +1,5 @@
 docker build -t jindongh/sandbox .
-docker run -d -p 4000:8080 jindongh/sandbox
+docker run -d -p 10000:10000 jindongh/sandbox
 
 # Debug
 docker ps

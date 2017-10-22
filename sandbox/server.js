@@ -5,7 +5,7 @@ const express = require('express');
 const bodyParser = require('body-parser')
 const child_process = require('child_process');
 
-const PORT = 8080;
+const PORT = 10000;
 const HOST = '0.0.0.0';
 const BASE_DIRECTORY = "data/";
 const SCRIPT_FILE_NAME = "main.js";

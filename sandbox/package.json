@@ -10,6 +10,6 @@
 	"dependencies": {
 		"body-parser": "^1.18.2",
 		"express": "^4.13.3",
-		"puppeteer": "^0.12.0"
+		"puppeteer": "github:jindongh/puppeteer#v0.12.1"
 	}
 }
