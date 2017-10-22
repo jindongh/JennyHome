@@ -1,0 +1,15 @@
+{
+	"name": "sandbox_app",
+	"version": "1.0.0",
+	"description": "Sandbox on Docker",
+	"author": "Jindong Huang<jindongh@gmail.com>",
+	"main": "server.js",
+	"scripts": {
+		"start": "node server.js"
+	},
+	"dependencies": {
+		"body-parser": "^1.18.2",
+		"express": "^4.13.3",
+		"puppeteer": "^0.12.0"
+	}
+}

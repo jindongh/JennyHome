@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 
 from django.shortcuts import render
 from django.http import JsonResponse
+import uuid,requests
 
 from .models import Script
 
@@ -11,9 +12,18 @@ def home(request):
     return render(request, 'puppeteer/home.html')
 
 def execute(request):
-    return JsonResponse({
-        'output': 'Hello, Worlp'
-        })
+    URL='http://127.0.0.1:8080'
+    data = {'id': str(uuid.uuid4()),
+            'script': request.POST['script']}
+    try:
+        response = requests.post(URL, data=data)
+        return JsonResponse(response.json())
+    except Exception, e:
+        return JsonResponse({
+            'code': -1,
+            'stdout': '',
+            'stderr': str(e)
+            })
 
 def list_all(request):
     scripts = Script.objects.filter(user = request.user.is_active and request.user or None)

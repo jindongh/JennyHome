@@ -88,10 +88,12 @@ function executeScript() {
 			'X-CSRFToken': csrftoken
 		},
 		data: {
-			code: $("#scriptCode").val()
+			script: $("#scriptCode").val()
 		}
 	}).done(function(data) {
-		$("#output").html(data.output);
+		$("#code").html(data.code);
+		$("#stdout").html(data.stdout);
+		$("#stderr").html(data.stderr);
 	});
 };
 
@@ -121,8 +123,9 @@ $(document).ready(function(){
 		<input type="button" id="delButton" value="Delete" />
 		<input type="button" id="execButton" value="Execute" />
 		<hr/>
-		<div id="output">
-		</div>
+		Code:<pre id="code"></pre>
+		Stdout:<pre id="stdout"></pre>
+		Stderr:<pre id="stderr" style="color:red;"></pre>
 	</div>
 </div>
 {% endblock %}

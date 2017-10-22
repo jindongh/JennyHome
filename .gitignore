@@ -6,3 +6,6 @@ jennyhome/config.py
 pic_folder/
 hjz.out
 hjz.err
+
+**/node_modules/
+**/package-lock.json
