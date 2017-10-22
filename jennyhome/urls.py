@@ -13,6 +13,7 @@ urlpatterns = [
     url(r'^baby/', include('baby.urls')),
     url(r'^cronjobs/', include('cronjobs.urls')),
     url(r'^bookmark/', include('bookmark.urls')),
+    url(r'^puppeteer/', include('puppeteer.urls')),
 
     url('^', include('django.contrib.auth.urls')),
     url(r'^admin/', admin.site.urls),

@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block javascript %}
+<script>
+var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+
+function setScriptItem(id, name){
+	if ($("#script"+id).length) {
+		$("#code"+id).html(name);
+		return;
+	}
+	var item = '<li id="script'+id+'">'
+		+ '<a href="#" onclick="return loadScript(' + id + ');">'
+		+ '<div id="code'+id+'">' + name + '</div>'
+		+ '</a>'
+		+ '</li>';
+	$("#scriptList").append(item);
+}
+
+function showScript(id, name, script) {
+	$("#scriptId").attr("value", id);
+	$("#scriptName").val(name);
+	$("#scriptCode").val(script);
+}
+
+function newScript(){
+	showScript('', '', '');
+}
+
+function listScripts(){
+	$.ajax({
+		url: 'api/list/',
+		headers: {
+			'X-CSRFToken': csrftoken
+		}
+	}).done(function(data){
+		$(data).each(function(id,item){
+			setScriptItem(item.id, item.name);
+		});
+	});
+}
+
+function loadScript(scriptId) {
+	$.ajax({
+		url: 'api/get/'+scriptId,
+		headers: {
+			'X-CSRFToken': csrftoken
+		}
+	}).done(function(data){
+		showScript(data.id, data.name, data.code);
+	});
+}
+
+function deleteScript() {
+	$.ajax({
+		url: 'api/delete/'+$("#scriptId").val(),
+		headers: {
+			'X-CSRFToken': csrftoken
+		}
+	}).done(function(data){
+		$("#script"+data.id).remove();
+		newScript();
+	});
+}
+
+function saveScript() {
+	$.ajax({
+		url: 'api/update/',
+		type: 'POST',
+		headers: {
+			'X-CSRFToken': csrftoken
+		},
+		data: {
+			id: $("#scriptId").val(),
+			name: $("#scriptName").val(),
+			code: $("#scriptCode").val(),
+		}
+	}).done(function(data){
+		setScriptItem(data.id, data.name);
+	});
+}
+
+function executeScript() {
+	$.ajax({
+		url: 'api/execute/',
+		type: 'POST',
+		headers: {
+			'X-CSRFToken': csrftoken
+		},
+		data: {
+			code: $("#scriptCode").val()
+		}
+	}).done(function(data) {
+		$("#output").html(data.output);
+	});
+};
+
+$(document).ready(function(){
+	$("#newButton").on('click', newScript);
+	$("#saveButton").on('click', saveScript);
+	$("#delButton").on('click', deleteScript);
+	$("#execButton").on('click', executeScript);
+	listScripts();
+});
+</script>
+
+{% endblock %}
+
+{% block content %}
+<div class="row">
+	<div class="sidebar col-sm-2">
+		<ul id="scriptList" class="nav nav-sidebar">
+		</ul>
+	</div>
+	<div class="main col-sm-8">
+		<input type='hidden' id="scriptId"></input>
+		Name:<input type="text" id="scriptName"></input>
+		<textarea id="scriptCode" width="100%" height="50%"></textarea>
+		<input type="button" id="newButton" value="New" />
+		<input type="button" id="saveButton" value="Save" />
+		<input type="button" id="delButton" value="Delete" />
+		<input type="button" id="execButton" value="Execute" />
+		<hr/>
+		<div id="output">
+		</div>
+	</div>
+</div>
+{% endblock %}
