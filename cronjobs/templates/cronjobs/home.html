@@ -1,61 +1,104 @@
-{% extends "base.html" %}
+{% extends "base.html" %} 
+{% load static %}
+
+{% block stylesheet %}
+		<link rel="stylesheet" type="text/css" href="{% static 'css/cronjob.css' %}">
+		<link rel="stylesheet" type="text/css" href="{% static 'css/jquery.flowchart.min.css' %}">
+{% endblock %}
 
 {% block javascript %}
-<script>
-var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
-function showExecutions(jobId, jobName) {
-	if ($("#collapse"+jobName).hasClass('in')) {
-		return;
-	}
-	$.ajax({
-		url: '/cronjobs/api/executions',
-		type: 'GET',
-		headers: {
-			'X-CSRFToken': csrftoken
-		},
-		data: '{}',
-		dataType: 'json',
-		data: {'job':jobId}
-	}).done(function(data) {
-		$("#data"+jobName).html('');
-		$(data).each(function(i, job){
-			var item = '<div href="#" class="list-group-item">'
-				+ job.run_time + '&nbsp;&nbsp;';
-			if (job.status == 'Executed') {
-				item += '<font color="green">' + job.status + '</font>&nbsp;'
-					+ '<pre>' + job.retval + '</pre>';
-			} else {
-				if (job.status == 'Error!') {
-					item += '<font color="red">' + job.status + '</font>&nbsp;';
-				} else {
-					item += '<font color="red">' + job.status + '</font>&nbsp;';
-				}
-				item += job.exception
-					+ '<pre>' + job.traceback + '</pre>';
-			}
-			item += '</div>';
-			$("#data"+jobName).append(item);
-		});
-	});
-}
-</script>
+<script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script src="{% static 'js/jquery.flowchart.min.js' %}"></script>
+<script src="{% static 'js/crontab.js' %}"></script>
 {% endblock %}
 
 {% block content %}
-<h2>Cronjobs</h2>
+<nav class="navbar navbar-default">
+	<div class="container-fluid">
+		<ul id="workflowList" class="nav navbar-nav">
+			<li><a href="#" onclick="showCreateWorkflow()">+</a></li>
+		</ul>
+	</div>
+</nav>
 
-<div class="panel-group">
-	{% for job in jobs %}
-	<div class="panel panel-default">
-		<a class="list-group-item" data-toggle="collapse" href="#collapse{{job.name}}" onclick="showExecutions('{{job.id}}','{{job.name}}');">
-			<span class="badge">{{job.next_run_time}}</span>
-			{{ job.name }}
-		</a>
-		<div class="panel-collapse collapse" id="collapse{{job.name}}">
-			<div class="panel-body" id="data{{job.name}}">
+<div class="row">
+	<div class="col-sm-2">
+		<select class="form-control" id="step">
+			<option>Schedule</option>
+			<option>Relay</option>
+			<option>SMS</option>
+		</select>
+	</div>
+	<div class="col-sm-3">
+		<button id='addStepBtn' class="btn btn-default">Add Step</button>
+		<button id='deleteStepBtn' class="btn btn-danger">Delete Step</button>
+	</div>
+	<div class="col-sm-7">
+		<div class="pull-right">
+		<button id="saveWorkflowBtn" class="btn btn-default">Save</button>
+		<button id="runWorkflowBtn" class="btn btn-default">Run</button>
+		<button id="pauseWorkflowBtn" class="btn btn-default">Pause</button>
+		<button id="resumeWorkflowBtn" class="btn btn-default">Resume</button>
+		<button id="deleteWorkflowBtn" class="btn btn-danger">Delete</button>
+		</div>
+	</div>
+</div>
+<div class="row">
+	<input type='hidden' id='workflowId'></input>
+	<div id="workflow"></div>
+</div>
+<div class="row">
+	<div class="panel-group">
+		{% for job in jobs %}
+		<div class="panel panel-default">
+			<a class="list-group-item" data-toggle="collapse" href="#collapse{{job.name}}" onclick="showExecutions('{{job.id}}','{{job.name}}');">
+				<span class="badge">{{job.next_run_time}}</span>
+				{{ job.name }}
+			</a>
+			<div class="panel-collapse collapse" id="collapse{{job.name}}">
+				<div class="panel-body" id="data{{job.name}}">
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+</div>
+
+<div id="workflowModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Workflow</h4>
+			</div>
+			<div class="modal-body">
+				Name:<input type="text" id="workflowName">
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn-default" id="createWorkflowBtn">Create</button>
+				<button type="button" class="btn-default" data-dismiss="modal">Close</button>
 			</div>
 		</div>
 	</div>
-	{% endfor %}
 </div>
+
+<div id="addStepDiv" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Step</h4>
+			</div>
+			<div class="modal-body">
+				Name:<input id="stepId" type="text"/><br/>
+				Input:<input id="stepInput" type="text"/><br/>
+				Output:<input id="stepOutput" type="text"/><br/>
+			</div>
+			<div class="modal-footer">
+				<button id="saveStepBtn" class="btn btn-default">Create</button>
+			</div>
+		</div>
+	</div>
+</div>
+
 {% endblock %}

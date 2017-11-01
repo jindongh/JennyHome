@@ -10,4 +10,4 @@ class Script(models.Model):
     name = models.TextField()
     code = models.TextField()
     created = models.DateTimeField(auto_now_add=True)
-    updated = models.DateTimeField(auto_now_add=True)
+    updated = models.DateTimeField(auto_now=True)
