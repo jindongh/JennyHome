@@ -5,7 +5,7 @@
 <script>
 var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
 function addCategory() {
-	editCategory('', '');
+	return editCategory('', '');
 }
 function accessBookmark(bookmarkId) {
 	window.open('/bookmark/access/'+bookmarkId);
@@ -14,6 +14,8 @@ function editCategory(categoryId, categoryName) {
 	$("#categoryId").attr('value', categoryId);
 	$("#categoryName").val(categoryName);
 	$("#categoryModal").modal('show');
+	setTimeout(function() { $('#categoryName').focus() }, 500);
+	return false;
 }
 function addCategoryNode(data) {
 	var category = '<li class="category" id="category'+data.id+'">'
@@ -93,6 +95,8 @@ function editBookmark(bookmarkId, bookmarkName, bookmarkLink) {
 	$("#bookmarkName").val(bookmarkName);
 	$("#bookmarkLink").val(bookmarkLink);
 	$("#bookmarkModal").modal('show');
+	setTimeout(function() { $('#bookmarkName').focus() }, 500);
+
 }
 
 function saveBookmark() {
@@ -146,7 +150,7 @@ $(document).ready(function(){
 				{% for category in categories %}
 				<li class="category" id="category{{category.id}}"><a href="#" onclick="showCategory('{{category.id}}');">{{category.name}}</a></li>
 				{% endfor %}
-				<li><a href="#" onclick="addCategory()">+</a></li>
+				<li><a href="#" onclick="return addCategory()">+</a></li>
 			</ul>
 		</div>
 	</nav>
