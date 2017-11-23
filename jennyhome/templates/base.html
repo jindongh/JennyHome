@@ -28,6 +28,7 @@
 						<li {% if '/baby/' in request.path %} class="active"{% endif %}><a href="/baby/">Baby</a></li>
 						{% endif %}
 						<li {% if '/bookmark/' in request.path %} class="active"{% endif %}><a href="/bookmark/">Bookmark</a></li>
+						<li {% if '/iot/' in request.path %} class="active"{% endif %}><a href="/iot/">Iot</a></li>
 						<li {% if '/puppeteer/' in request.path %} class="active"{% endif %}><a href="/puppeteer/">Puppeteer</a></li>
 						{% if request.user.is_superuser %}
 						<li {% if '/admin/' in request.path %} class="active"{% endif %}><a href="/admin/">Admin</a></li>

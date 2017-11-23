@@ -1,5 +1,5 @@
 function showExecutions(workflowId, workflowName) {
-	if ($("#collapse"+jobName).hasClass('in')) {
+	if ($("#collapse"+workflowName).hasClass('in')) {
 		return;
 	}
 	ajaxDo('/cronjobs/api/workflow/executions', 'GET', {'id': workflowId}, function(data) {

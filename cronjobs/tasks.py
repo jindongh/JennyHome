@@ -4,6 +4,8 @@ from django_apscheduler.jobstores import DjangoJobStore
 from django_apscheduler.jobstores import register_events
 from django.conf import settings
 from garage import door
+from iot.views import dashButtonEvent
+from scapy.all import sniff,DHCP,Ether
 import boto3
 
 scheduler = BackgroundScheduler()
@@ -26,11 +28,16 @@ def doorIsOpen():
                 Message='Garage door is OPEN %s' % url)
     return 'Door is open and notified %s' % ','.join(settings.ADMIN_PHONES)
 
+def detect_button(pkt):
+    if pkt.haslayer(DHCP):
+        dashButtonEvent(pkt[Ether].src)
+
 @scheduler.scheduled_job('interval',
-        id='testJob',
-        weeks = 54,
+        id='MonitorDashButton',
+        seconds = 10,
         start_date='2017-09-01 00:00:00')
-def is_door_close():
+def monitorDashButton():
+    sniff(prn=detect_button, filter="(udp and (port 67 or 68))", store=0)
     return 'MyResponse'
 
 register_events(scheduler)

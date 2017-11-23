@@ -26,7 +26,7 @@ SECRET_KEY = '4=f#0$a87r$z)bx2!0_3iv4y+oeqqxzag38fk@k0onym2asu%m'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [DOMAIN]
+ALLOWED_HOSTS = [DOMAIN, LAN_IP]
 
 # Application definition
 
@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'baby',
     'bookmark',
     'puppeteer',
+    'iot',
 ]
 
 MIDDLEWARE = [

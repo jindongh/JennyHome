@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block javascript %}
+<script>
+function showHistory(id) {
+	if ($("#collapse"+id).hasClass('in')) {
+		return;
+	}
+	ajaxDo('/iot/api/history', 'GET', {'thing': id}, function(data) {
+		$("#data"+id).html('');
+		$(data).each(function(i, operation) {
+			var item = '<div href="#" class="list-group-item">'
+				+ operation.time + '&nbsp;&nbsp;'
+				+ operation.event
+				+'</div>';
+			$("#data"+id).append(item);
+		});
+	});
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+	<div class="panel-group">
+		{% for thing in things %}
+		<div class="panel panel-default">
+			<a class="list-group-item" data-toggle="collapse" href="#collapse{{thing.id}}" onclick="showHistory('{{thing.id}}');">
+				<span class="badge">{{thing.state}}</span>
+				{{ thing.name }}
+			</a>
+			<div class="panel-collapse collapse" id="collapse{{thing.id}}">
+				<div class="panel-body" id="data{{thing.id}}">
+				</div>
+			</div>
+		</div>
+		{% endfor %}
+	</div>
+</div>
+
+<div id="nameModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h4 class="modal-title">Relay</h4>
+			</div>
+			<div class="modal-body">
+				Name:<input type="text" id="workflowName">
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn-default" id="updateNameBtn">Create</button>
+				<button type="button" class="btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

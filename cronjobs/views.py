@@ -17,7 +17,7 @@ def home(request):
     return render(request, 'cronjobs/home.html', {'jobs': jobs})
 
 def executions(request):
-    jobId = request.GET['job'];
+    jobId = request.GET['id'];
     execs = DjangoJobExecution.objects.filter(job__id=jobId)[:10]
     resp = [{
         'status': execution.status,

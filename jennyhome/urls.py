@@ -14,6 +14,7 @@ urlpatterns = [
     url(r'^cronjobs/', include('cronjobs.urls')),
     url(r'^bookmark/', include('bookmark.urls')),
     url(r'^puppeteer/', include('puppeteer.urls')),
+    url(r'^iot/', include('iot.urls')),
 
     url('^', include('django.contrib.auth.urls')),
     url(r'^admin/', admin.site.urls),
