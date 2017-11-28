@@ -26,7 +26,7 @@ function showHistory(id) {
 		{% for thing in things %}
 		<div class="panel panel-default">
 			<a class="list-group-item" data-toggle="collapse" href="#collapse{{thing.id}}" onclick="showHistory('{{thing.id}}');">
-				<span class="badge">{{thing.state}}</span>
+				<span class="badge">{{thing.state}}@{{thing.updated}} </span>
 				{{ thing.name }}
 			</a>
 			<div class="panel-collapse collapse" id="collapse{{thing.id}}">

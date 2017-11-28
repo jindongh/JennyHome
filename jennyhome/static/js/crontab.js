@@ -73,7 +73,10 @@ function createWorkflow() {
 						output_1: {
 							label: 'time'
 						}
-					}
+					},
+					params: {
+						param1: 'Hello'
+					},
 				}
 			}
 		}

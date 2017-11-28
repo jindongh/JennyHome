@@ -28,15 +28,15 @@ def doorIsOpen():
                 Message='Garage door is OPEN %s' % url)
     return 'Door is open and notified %s' % ','.join(settings.ADMIN_PHONES)
 
-def detect_button(pkt):
-    if pkt.haslayer(DHCP):
-        dashButtonEvent(pkt[Ether].src)
 
 @scheduler.scheduled_job('interval',
         id='MonitorDashButton',
         seconds = 10,
         start_date='2017-09-01 00:00:00')
 def monitorDashButton():
+    def detect_button(pkt):
+        if pkt.haslayer(DHCP):
+            dashButtonEvent(pkt[Ether].src)
     sniff(prn=detect_button, filter="(udp and (port 67 or 68))", store=0)
     return 'MyResponse'
 

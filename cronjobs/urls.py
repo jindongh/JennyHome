@@ -13,8 +13,6 @@ urlpatterns = [
     url(r'^api/workflow/pause/(?P<id>\d+)', views.pause_workflow),
     url(r'^api/workflow/resume/(?P<id>\d+)', views.resume_workflow),
     url(r'^api/workflow/execution', views.executions, name='executions'),
-    url(r'^api/steps/list', views.list_step),
-    url(r'^api/steps/update', views.update_step),
-    url(r'^api/steps/delete', views.delete_step),
+    url(r'^api/step/(?P<stepId>\w+)', views.get_step),
     url(r'^api/test', views.test),
 ]

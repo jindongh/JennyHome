@@ -10,11 +10,13 @@ from garage import door
 from .tasks import scheduler
 from .models import Workflow
 from .executor import Executor
+from .steps import Step,StepManager
 
 # Create your views here.
 def home(request):
     jobs = DjangoJob.objects.all()
-    return render(request, 'cronjobs/home.html', {'jobs': jobs})
+    steps = StepManager.getSteps()
+    return render(request, 'cronjobs/home.html', {'jobs': jobs, 'steps': steps})
 
 def executions(request):
     jobId = request.GET['id'];
@@ -39,8 +41,8 @@ def get_workflow(request, id):
     workflow = Workflow.objects.get(pk=id)
     return JsonResponse(_workflow2Json(workflow, includeData=True))
 
-def run_workflow(request):
-    task = Executor(request.POST['id'])
+def run_workflow(request,workflowId):
+    task = Executor(workflowId)
     params = request.POST['params']
     result = task.execute(params)
     return JsonResponse(result)
@@ -75,14 +77,13 @@ def resume_workflow(request, jobId):
     scheduler.resume_job(jobId)
     return JsonResponse({})
 
-def list_step(request):
-    pass
-
-def update_step(request):
-    pass
-
-def delete_step(request, stepId):
-    pass
+def get_step(request, stepId):
+    step = StepManager.getStep(stepId)
+    return JsonResponse({
+        'inputs': step.inputs,
+        'outputs': step.outputs,
+        'params': step.params
+        })
 
 def test(request):
     doorState = door.getDoorStateFromCV()

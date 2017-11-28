@@ -10,6 +10,12 @@
 <script src="//code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <script src="{% static 'js/jquery.flowchart.min.js' %}"></script>
 <script src="{% static 'js/crontab.js' %}"></script>
+<script>
+function updateStepParams() {
+	var stepId = $("#step").val();
+	console.log(stepId);
+}
+</script>
 {% endblock %}
 
 {% block content %}
@@ -22,18 +28,11 @@
 </nav>
 
 <div class="row">
-	<div class="col-sm-2">
-		<select class="form-control" id="step">
-			<option>Schedule</option>
-			<option>Relay</option>
-			<option>SMS</option>
-		</select>
-	</div>
 	<div class="col-sm-3">
 		<button id='addStepBtn' class="btn btn-default">Add Step</button>
 		<button id='deleteStepBtn' class="btn btn-danger">Delete Step</button>
 	</div>
-	<div class="col-sm-7">
+	<div class="col-sm-8">
 		<div class="pull-right">
 		<button id="saveWorkflowBtn" class="btn btn-default">Save</button>
 		<button id="runWorkflowBtn" class="btn btn-default">Run</button>
@@ -91,8 +90,14 @@
 			</div>
 			<div class="modal-body">
 				Name:<input id="stepId" type="text"/><br/>
-				Input:<input id="stepInput" type="text"/><br/>
-				Output:<input id="stepOutput" type="text"/><br/>
+				Type:
+				<select class="form-control" id="step" onchange="updateStepParams()">
+					{% for step in steps %}
+					<option value="{{step.id}}">{{step.name}}</option>
+					{% endfor %}
+				</select>
+				Params:<div id="stepParams">
+				</div>
 			</div>
 			<div class="modal-footer">
 				<button id="saveStepBtn" class="btn btn-default">Create</button>

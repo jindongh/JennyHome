@@ -8,5 +8,6 @@ urlpatterns = [
     url(r'^api/name', views.setName),
 
     url(r'^api/relay', views.relay),
+    url(r'^api/display', views.display),
     url(r'^api/temperature', views.temperature),
 ]
