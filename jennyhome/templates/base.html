@@ -2,6 +2,15 @@
 <html>
 	<head>
 		<meta charset="utf-8">
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-111449796-1"></script>
+		<script>
+window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+
+gtag('config', 'UA-111449796-1');
+		</script>
 		<title>{% block title %}Jenny Home{% endblock %}</title>
 		<link rel="stylesheet" type="text/css" href="//netdna.bootstrapcdn.com/bootstrap/3.0.2/css/bootstrap.min.css">
 		<link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -64,7 +73,7 @@
 		{% endblock %}
 		<p align="center">Copyleft @ Jenny</p>
 		</div>
-		<script src="//code.jquery.com/jquery-3.1.0.min.js"></script>
+		<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
 		<script src="//netdna.bootstrapcdn.com/bootstrap/3.0.2/js/bootstrap.min.js"></script>
 		<script src="{% static 'js/app.js' %}"></script>
 		{% block javascript %}{% endblock %}

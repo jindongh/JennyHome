@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block javascript %}
+<script>
+function deleteBlog(blogId) {
+	ajaxDo('/blog/delblog?id='+blogId, 'GET', {}, function(data) {
+		$("#blog"+blogId).remove();
+	});
+}
+</script>
+{% endblock %}
+
+
+{% block content %}
+<a href="/blog/prepare">
+	<i class="fa fa-plus-circle" aria-hidden="true"></i>
+</a>
+
+<br/>
+<span>
+	{% for tag in tags %}
+	<a href=/blog/blog?tagId={{tag.id}}">{{tag.name}}</a>
+	{% endfor %}
+</span>
+<br/>
+
+{% for blog in blogs %}
+<span id="blog{{blog.id}}">
+   	<a href="/blog/blog?id={{blog.id}}">{{blog.title }}</a>
+	<a href="/blog/prepare?id={{blog.id}}">
+		<i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+	</a>
+	&nbsp;
+	<a href='#' onclick="return deleteBlog({{blog.id}})">
+		<i class="fa fa-times" aria-hidden="true"></i>
+	</a>
+</span>
+<br/>
+{% endfor %}
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block stylesheet %}
+{% endblock %}
+
+{% block javascript %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.3.9/marked.min.js"></script>
+<script>
+var content="{{blog.content}}";
+$(function() {
+	$('#data').html(marked(content));
+});
+</script>
+{% endblock %}
+
+{% block content %}
+
+<h2>Title: {{blog.title}}
+<a href="/blog/prepare?id={{blog.id}}">Edit</a>
+</h2>
+
+<h3>Tags:
+	{% for tag in blog.tags_as_list %}
+	<a href="/blog/blog?tag={{tag}}">{{tag}}</a>&nbsp;
+	{% endfor %}
+
+</h3>
+
+<div id="data"></div>
+{% endblock %}
+

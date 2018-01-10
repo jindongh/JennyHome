@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block stylesheet %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.css">
+{% endblock %}
+
+{% block javascript %}
+<script src="https://cdn.jsdelivr.net/simplemde/latest/simplemde.min.js"></script>
+<script>
+$(function() {
+	var simplemde = new SimpleMDE({ element: $("#content")[0] });
+	simplemde.value($("#content").attr('value'));
+	$("#addTagLink").on('click', addTag);
+});
+function addTag() {
+	var tagName = prompt("Tag Name:");
+	ajaxDo('/blog/tag/', 'POST', {'name': tagName}, function(data) {
+		var tagDiv = "<span id='"+tagName+"'>"
+			+ "<a href='#' onclick='return appendTag(\""+tagName+"\")'>"+tagName+"</a>&nbsp;"
+			+ "<a href='#' onclick='return delTag(\""+tagName+"\")'>"
+			+ '<i class="fa fa-times" aria-hidden="true"></i>'
+			+ "</a>&nbsp;"
+			+ "</span>";
+		$("#tagList").append(tagDiv);
+	});
+	return false;
+}
+function appendTag(tagName) {
+	var separator = ",";
+	if ($("#tags").val() == "") {
+		separator = "";
+	}
+	$("#tags").val($("#tags").val()+separator+tagName);
+}
+function delTag(tagName) {
+	ajaxDo('/blog/deltag', 'POST', {'name': tagName}, function(data) {
+		$("#"+tagName).remove();
+	});
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<div id="tagList">
+<a id='addTagLink' href='#'>
+	<i class="fa fa-plus-square" aria-hidden="true"></i>
+</a>&nbsp;
+{% for tag in tags %}
+<span id="{{tag.name}}">
+	<a href="#" onclick='return appendTag("{{tag.name}}");'>{{tag.name}}</a>&nbsp;
+	<a href="#" onclick='return delTag("{{tag.name}}");'>
+		<i class="fa fa-times" aria-hidden="true"></i></a>
+	</a>&nbsp;
+</span>
+{% endfor %}
+</div>
+
+
+<form method="post" action="/blog/blog">
+	{% csrf_token %}
+<input type="hidden" id="id" value="{{id}}"/>
+Title: <input name="title" id="title" value="{{blog.title}}"/><br/>
+Tags: <input name="tags" id="tags" value="{{blog.tags}}" /><br/>
+<textarea name="content" id="content" value="{{blog.content}}"></textarea>
+<input type="submit" name="Submit"/>
+</form>
+{% endblock %}
+

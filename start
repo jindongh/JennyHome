@@ -2,7 +2,7 @@
 pgrep python | while read pid
 do
 	work_dir=$(readlink -f /proc/$pid/cwd)
-	if [ "$work_dir" == "$(pwd)" ];then
+	if [ "$work_dir" == "" -o "$work_dir" == "$(pwd)" ];then
 		kill -9 $pid
 	fi
 done
