@@ -10,7 +10,7 @@ import boto3
 
 scheduler = BackgroundScheduler()
 scheduler.add_jobstore(DjangoJobStore(), 'default')
-scheduler.add_executor(ThreadPoolExecutor(10))
+scheduler.add_executor(ThreadPoolExecutor(1))
 sns=boto3.client('sns')
 
 @scheduler.scheduled_job('interval',
@@ -37,6 +37,7 @@ def monitorDashButton():
     def detect_button(pkt):
         if pkt.haslayer(DHCP):
             dashButtonEvent(pkt[Ether].src)
+    scheduler.remove_job('MonitorDashButton')
     sniff(prn=detect_button, filter="(udp and (port 67 or 68))", store=0)
     return 'MyResponse'
 
