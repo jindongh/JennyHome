@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'bookmark',
     'puppeteer',
     'iot',
+    'recite',
 ]
 
 MIDDLEWARE = [

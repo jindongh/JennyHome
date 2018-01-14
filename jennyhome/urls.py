@@ -12,6 +12,7 @@ urlpatterns = [
     url(r'^bookmark/', include('bookmark.urls')),
     url(r'^puppeteer/', include('puppeteer.urls')),
     url(r'^iot/', include('iot.urls')),
+    url(r'^recite/', include('recite.urls')),
 
     url(r'^$', views.blog, name='home'),
     url('^blog/blog', views.blog, name='blog'),

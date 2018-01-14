@@ -1,0 +1,159 @@
+<!doctype html>
+<html>
+	<head>
+		<title>My Page</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel = "stylesheet" href = "https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+		<script src = "https://code.jquery.com/jquery-1.11.3.min.js"></script>
+		<script src = "https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+		<script>
+var KEY = "{{key}}";
+function deleteItem(itemId) {
+	$.get('/recite/delete?key='+KEY+'&id='+itemId, function(data) {
+		console.log(data);
+		$("#item"+itemId).remove();
+	});
+}
+$(document).ready(function(){
+	$("#enableSms").on('change', function(event){
+		if($("#enableSms").is(":checked")) {
+			$("#sms").show();
+		} else {
+			$("#sms").hide();
+		}
+	});
+	$("#enableEmail").on('change', function(event) {
+		if($("#enableEmail").is(":checked")) {
+			$("#email").show();
+		} else {
+			$("#email").hide();
+		}
+	});
+	$.get('/recite/setting?key='+KEY, function(data) {
+		console.log(data);
+		if(data.sms != '') {
+			$("#enableSms").click();
+			$("#sms").val(data.sms);
+		}
+		if(data.email != '') {
+			$("#enableEmail").click();
+			$("#email").val(data.email);
+		}
+		if(data.mobile != '') {
+			$("#enableMobile").click();
+		}
+	});
+
+	function addItem(item) {
+		var div = '<li id="item'+item.id+'"><a>'+item.content+'@'+item.created+'</a><a href="#" onclick="deleteItem('+item.id+');" >Delete</a></li>';
+		$("#itemList").prepend(div);
+	}
+	$.get('/recite/history?key='+KEY, function(data) {
+		$.each(data, function(index, item) {
+			addItem(item);
+		});
+		$("#itemList").listview("refresh");
+	});
+	$("#saveSetting").on('click', function(){
+		$.post('/recite/setting', {
+			key: KEY,
+			sms: $("#enableSms").is(':checked') ? $("#sms").val() : '',
+			email: $("#enableEmail").is(':checked') ? $("#email").val() : '',
+			mobile: $("#enableMobile").is(':checked') ? 'yes': '',
+			notAfter: -1,
+			notBefore: -1
+		}, function(data) {
+			console.log(data);
+			$("#settingPopup").popup("open"); 
+			setTimeout(function(){
+			  	$("#settingPopup").popup("close");
+				setTimeout(function(){
+					$.mobile.navigate('#mainPage');
+				}, 500);
+		   	}, 1000);
+		});
+	});
+	$("#cancelSetting").on('click', function(){
+		$.mobile.navigate('#mainPage');
+	});
+	$("#addItem").on('click', function() {
+		$.post('/recite/add', {
+			key: KEY,
+			content: $("#content").val()
+		}, function(data) {
+			console.log(data);
+			addItem(data);
+			$.mobile.navigate('#mainPage');
+			$("#itemList").listview("refresh");
+		});
+	});
+	$("#cancelItem").on('click', function(){
+		$.mobile.navigate('#mainPage');
+	});
+});
+		</script>
+	</head>
+	<body>
+		<div data-role="page" id="mainPage">
+			<div data-role="header">
+				<a href="#addPage" data-icon='plus'>Add</a>
+				<h1>Recite</h1>
+				<a href="#settingPage" data-icon='gear'>Settings</a>
+			</div>
+
+			<div role="main" class="ui-content">
+				<ul data-role="listview" id="itemList" data-inset="true" data-split-theme="d" data-split-icon="delete">
+				</ul>
+			</div>
+
+			<div data-role="footer">
+				<h4>Copyleft@jennyhome.tk</h4>
+			</div>
+		</div>
+		<!-- setting -->
+		<div data-role="page" id="settingPage">
+			<div data-role="header">
+				<h1>Setting</h1>
+			</div>
+
+			<div role="main" class="ui-content">
+				<fieldset data-role="controlgroup" data-type="horizontal">
+					<input type="checkbox" name="enableSms" id="enableSms">
+					<label for="enableSms">SMS</label>
+					<input type="checkbox" name="enableEmail" id="enableEmail">
+					<label for="enableEmail">Email</label>
+					<input type="checkbox" name="enableMobile" id="enableMobile">
+					<label for="enableMobile">Mobile</label>
+					<input type="text" name="sms" id="sms" placeholder="SMS" style="display:none">
+					<input type="text" name="email" id="email" placeholder="Email" style="display:none">
+				</fieldset>
+			</div>
+
+			<div data-role="popup" id="settingPopup" data-position-to="window" data-transition="turn">
+				<p>Setting is saved successfully.</p>
+			</div>
+
+
+			<div data-role="footer">
+				<fieldset>
+					<button class="ui-btn ui-btn-inline" id="saveSetting">Save</button>
+					<button class="ui-btn ui-btn-inline" id="cancelSetting">Cancel</button>
+				</fieldset>
+			</div>
+		</div>
+		<div data-role="page" id="addPage">
+			<div data-role="header">
+			</div>
+			<div role="main" class="ui-content">
+				<label for="textarea">Recite:</label>
+				<textarea cols="40" rows="8" name="textarea" id="content"></textarea>
+			</div>
+			<div data-role="footer">
+				<fieldset>
+					<button class="ui-btn ui-btn-inline" id="addItem">Save</button>
+					<button class="ui-btn ui-btn-inline" id="cancelItem">Cancel</button>
+				</fieldset>
+			</div>
+		</div>
+	</body>
+</html>

@@ -10,7 +10,7 @@ import boto3
 
 scheduler = BackgroundScheduler()
 scheduler.add_jobstore(DjangoJobStore(), 'default')
-scheduler.add_executor(ThreadPoolExecutor(1))
+scheduler.add_executor(ThreadPoolExecutor(5))
 sns=boto3.client('sns')
 
 @scheduler.scheduled_job('interval',
