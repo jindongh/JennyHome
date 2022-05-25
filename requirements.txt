@@ -1,6 +1,6 @@
 APScheduler==3.5.0
 Django==1.11.5
-PyJWT==1.5.3
+PyJWT==2.4.0
 PyYAML==3.12
 RPi.GPIO==0.6.3
 argparse==1.2.1
