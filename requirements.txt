@@ -15,7 +15,7 @@ futures==3.1.1
 idna==2.6
 imutils==0.4.3
 jmespath==0.9.3
-numpy==1.13.1
+numpy==1.21.0
 oauthlib==2.0.2
 python-dateutil==2.6.1
 python-openid==2.2.5
